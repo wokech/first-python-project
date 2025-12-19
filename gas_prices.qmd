@@ -1,0 +1,28 @@
+---
+title: "Weekly Gas Prices"
+format: html
+---
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data_url = 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-07-01/weekly_gas_prices.csv'
+df = pd.read_csv(data_url, parse_dates=["date"])
+```
+
+```{python}
+filtered = df[
+    (df["fuel"] == "gasoline") &
+    (df["formulation"] == "all")
+]
+filtered = filtered.sort_values("date")
+
+for grade, group in filtered.groupby("grade"):
+    plt.plot(group["date"], group["price"], label=grade)
+
+plt.title("Gasoline prices over time")
+plt.xlabel("Date")
+plt.ylabel("Price (USD per gallon)")
+plt.legend(title="Grade")
+```
